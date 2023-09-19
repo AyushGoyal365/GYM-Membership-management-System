@@ -1,0 +1,6 @@
+base64
+mysql-connector-python
+datetime
+python-dateutil
+streamlit
+pandas

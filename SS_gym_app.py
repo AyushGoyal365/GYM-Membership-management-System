@@ -7,12 +7,13 @@ from dateutil.parser import parse
 import streamlit as st
 import pandas as pd
 
-db = mysql.connector.connect(host='localhost', username='root', password='ayush123', database='GYM')
+db = mysql.connector.connect(host='localhost', username='root', password='ayush123', database='sonu')
 
 cursor = db.cursor()
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS members (
         id INT AUTO_INCREMENT PRIMARY KEY,
+        prefixed_id VARCHAR(255),       
         Name VARCHAR(255),
         Phone_Number VARCHAR(15),
         Age INT,
@@ -26,6 +27,8 @@ cursor.execute("""
         Status varchar(255) Default 'Active'       
     )
 """)
+
+
 db.commit()
 cursor.close()
 
@@ -333,29 +336,4 @@ elif page == "View Data":
        
     else:
         st.warning("No data Found ")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
 

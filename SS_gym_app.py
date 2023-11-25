@@ -2,35 +2,12 @@ import base64
 import mysql.connector
 import datetime
 from datetime import date
-from datetime import datetime
+from datetime import datetime ,timedelta
 from dateutil.parser import parse
 import streamlit as st
 import pandas as pd
 
-db = mysql.connector.connect(host='localhost', username='root', password='ayush123', database='sonu')
-
-cursor = db.cursor()
-cursor.execute("""
-    CREATE TABLE IF NOT EXISTS members (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        prefixed_id VARCHAR(255),       
-        Name VARCHAR(255),
-        Phone_Number VARCHAR(15),
-        Age INT,
-        Height FLOAT,
-        Weight FLOAT,
-        Any_disease VARCHAR(255),
-        joining_date DATE,
-        ending_date DATE,
-        Fees INT,
-        pending INT,
-        Status varchar(255) Default 'Active'       
-    )
-""")
-
-
-db.commit()
-cursor.close()
+db = mysql.connector.connect(host='localhost', username='root', password='ayush123', database='ss')
 
 class Members:
 
@@ -69,8 +46,8 @@ class Membership(Members):
             
     def insert_membership(self, member_id):
         cursor = db.cursor()
-        sql = "UPDATE members SET joining_date = %s, ending_date = %s WHERE id = %s"
-        val = (self.joining_date, self.ending_date, member_id)
+        sql = "UPDATE members SET joining_date = %s, ending_date = %s,Membership_type = %s WHERE id = %s"
+        val = (self.joining_date, self.ending_date,membership_type, member_id)
         try:
             cursor.execute(sql, val)
             db.commit()
@@ -101,6 +78,7 @@ st.title(" SS Fitness Membership Application")
 page = st.sidebar.selectbox("Options",["Add New Member","Fees Status","Update Info","View Data"])
 
 if page == "Add New Member":
+    ending_date = ""
     st.header("Member Details")
     name = st.text_input("Name")
     phone_number = st.text_input("Phone Number")
@@ -108,15 +86,92 @@ if page == "Add New Member":
     height = st.number_input("Height (in cm)", min_value=1)
     weight = st.number_input("Weight (in kg)", min_value=1)
     any_disease = st.text_input("Any Disease (optional)")
-   
 
     st.header("Membership Dates")
     joining_date = st.text_input("Joining Date (YYYY-MM-DD)", value=date.today().strftime("%Y-%m-%d"), key="Joining_Date_Input")
-    ending_date = st.text_input("Ending Date (YYYY-MM-DD)", key="Ending_Date_Input")
+    membership_type = st.selectbox("Membership Type ", ["Regular 1 Month", "Regular 3 Month", "Regular 6 Month", "Regular 1 Year","PT 1 Month", "PT 3 Month", "PT 6 Month", "PT 1 Year", "Online PT 1 Month", "Online PT 3 Month", "Online PT 6 Month", "Online PT 1 Year"])
+    if membership_type == "Regular 1 Month":
+        current_date = datetime.today()
+        next_month_date = current_date + timedelta(days=30)
+
+        auto_ending_date = next_month_date.strftime("%Y-%m-%d")
+        ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")
+    elif membership_type == "Regular 3 Month":
+        current_date = datetime.today()
+        next_month_date = current_date + timedelta(days=90)
+
+        auto_ending_date = next_month_date.strftime("%Y-%m-%d")
+        ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")     
+    elif membership_type == "Regular 6 Month":
+        current_date = datetime.today()
+        next_month_date = current_date + timedelta(days=120)
+
+        auto_ending_date = next_month_date.strftime("%Y-%m-%d")
+        ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")  
+    elif membership_type == "Regular 1 Year":
+        current_date = datetime.today()
+        next_month_date = current_date + timedelta(days=360)
+
+        auto_ending_date = next_month_date.strftime("%Y-%m-%d")
+        ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")   
+    elif membership_type == "PT 1 Month":
+        current_date = datetime.today()
+        next_month_date = current_date + timedelta(days=30)
+
+        auto_ending_date = next_month_date.strftime("%Y-%m-%d")
+        ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")   
+    elif membership_type == "PT 3 Month":
+        current_date = datetime.today()
+        next_month_date = current_date + timedelta(days=90)
+
+        auto_ending_date = next_month_date.strftime("%Y-%m-%d")
+        ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")   
+
+    elif membership_type == "PT 6 Month":
+        current_date = datetime.today()
+        next_month_date = current_date + timedelta(days=120)
+
+        auto_ending_date = next_month_date.strftime("%Y-%m-%d")
+        ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")   
+    elif membership_type == "PT 1 Year":
+        current_date = datetime.today()
+        next_month_date = current_date + timedelta(days=360)
+
+        auto_ending_date = next_month_date.strftime("%Y-%m-%d") 
+        ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")  
+
+    elif membership_type == "Online PT 1 Month":
+        current_date = datetime.today()
+        next_month_date = current_date + timedelta(days=30)
+
+        auto_ending_date = next_month_date.strftime("%Y-%m-%d")
+        ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")   
+    elif membership_type == "On    line PT 3 Month":
+        current_date = datetime.today()
+        next_month_date = current_date + timedelta(days=90)
+
+        auto_ending_date = next_month_date.strftime("%Y-%m-%d")
+        ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")   
+    elif membership_type == "Online PT 6 Month":
+        current_date = datetime.today()
+        next_month_date = current_date + timedelta(days=120)
+
+        auto_ending_date = next_month_date.strftime("%Y-%m-%d") 
+        ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input") 
+    elif membership_type == "Online PT 1 Year":
+        current_date = datetime.today()
+        next_month_date = current_date + timedelta(days=360)
+
+        auto_ending_date = next_month_date.strftime("%Y-%m-%d") 
+        ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")                                           
+        
+
+    
+        
    
     st.header("Fees Details")
     fees_paid = st.number_input("Fees Paid (in Rs)", min_value=0)
-    pending_fees = st.number_input("Pending Fees (in Rs)", min_value=0)
+    pending_fees = st.number_input("Pending Fees (in Rs)", min_value=0) 
     
     cursor = db.cursor()
 
@@ -158,34 +213,119 @@ elif page =="Fees Status":
             try:
                 today = datetime.now().date() # type: ignore
 
-                sql = "SELECT id FROM members WHERE ending_date <= %s And Status = 'Active'"
+                sql = "SELECT id, name FROM members WHERE ending_date <= %s And Status = 'Active'"
                 cursor.execute(sql, (today,))
-                membership_ids = cursor.fetchall()
+                membership_ids= cursor.fetchall()
 
                 if membership_ids:
                     st.warning("Memberships Over:")
                 
                     for membership_id in membership_ids:
-                        st.write(f"Membership ID {membership_id[0]} is over.")
-                        recharged = st.radio(f"Do you want to update Membership for ID {membership_id[0]}?", ("Yes", "No"))
+                        st.write(f"Membership ID {membership_id[0]},{membership_id[1]} is over.")
+                        recharged = st.radio(f"Do you want to update Membership for ID {membership_id[0]},{membership_id[1]}?", ("Yes", "No"))
 
                         if recharged == "Yes":
-                            new_ending_date = st.date_input(f"New ending date for ID {membership_id[0]}")
+                            membership_type = st.selectbox("Membership Type ", ["Regular 1 Month", "Regular 3 Month", "Regular 6 Month", "Regular 1 Year","PT 1 Month", "PT 3 Month", "PT 6 Month", "PT 1 Year", "Online PT 1 Month", "Online PT 3 Month", "Online PT 6 Month", "Online PT 1 Year"])
+                            if membership_type == "Regular 1 Month":
+                               current_date = datetime.today() # type: ignore
+                               next_month_date = current_date + timedelta(days=30)
+
+                               auto_ending_date = next_month_date.strftime("%Y-%m-%d")
+                               new_ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")
+                            elif membership_type == "Regular 3 Month":
+                                current_date = datetime.today() # type: ignore
+                                next_month_date = current_date + timedelta(days=90)
+
+                                auto_ending_date = next_month_date.strftime("%Y-%m-%d")
+                                new_ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")     
+                            elif membership_type == "Regular 6 Month":
+                                current_date = datetime.today() # type: ignore
+                                next_month_date = current_date + timedelta(days=120)
+
+                                auto_ending_date = next_month_date.strftime("%Y-%m-%d")
+                                new_ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")  
+                            elif membership_type == "Regular 1 Year":
+                                current_date = datetime.today() # type: ignore
+                                next_month_date = current_date + timedelta(days=360)
+
+                                auto_ending_date = next_month_date.strftime("%Y-%m-%d")
+                                new_ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")   
+                            elif membership_type == "PT 1 Month":
+                                current_date = datetime.today() # type: ignore
+                                next_month_date = current_date + timedelta(days=30)
+
+                                auto_ending_date = next_month_date.strftime("%Y-%m-%d")
+                                new_ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")   
+                            elif membership_type == "PT 3 Month":
+                                current_date = datetime.today() # type: ignore
+                                next_month_date = current_date + timedelta(days=90)
+
+                                auto_ending_date = next_month_date.strftime("%Y-%m-%d")
+                                new_ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")   
+
+                            elif membership_type == "PT 6 Month":
+                                current_date = datetime.today() # type: ignore
+                                next_month_date = current_date + timedelta(days=120)
+
+                                auto_ending_date = next_month_date.strftime("%Y-%m-%d")
+                                new_ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")   
+                            elif membership_type == "PT 1 Year":
+                                current_date = datetime.today() # type: ignore
+                                next_month_date = current_date + timedelta(days=360)
+
+                                auto_ending_date = next_month_date.strftime("%Y-%m-%d") 
+                                new_ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")  
+
+                            elif membership_type == "Online PT 1 Month":
+                                current_date = datetime.today() # type: ignore
+                                next_month_date = current_date + timedelta(days=30)
+
+                                auto_ending_date = next_month_date.strftime("%Y-%m-%d")
+                                new_ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")   
+                            elif membership_type == "On    line PT 3 Month":
+                                current_date = datetime.today() # type: ignore
+                                next_month_date = current_date + timedelta(days=90)
+
+                                auto_ending_date = next_month_date.strftime("%Y-%m-%d")
+                                new_ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")   
+                            elif membership_type == "Online PT 6 Month":
+                                current_date = datetime.today() # type: ignore
+                                next_month_date = current_date + timedelta(days=120)
+
+                                auto_ending_date = next_month_date.strftime("%Y-%m-%d") 
+                                new_ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input") 
+                            elif membership_type == "Online PT 1 Year":
+                                current_date = datetime.today() # type: ignore
+                                next_month_date = current_date + timedelta(days=360)
+
+                                auto_ending_date = next_month_date.strftime("%Y-%m-%d") 
+                                new_ending_date = st.text_input("Ending Date (YYYY-MM-DD)",value=auto_ending_date , key="Ending_Date_Input")
+
+                            fees_paid = st.number_input("Fees Paid (in Rs)", min_value=0)
+                            pending_fees = st.number_input("Pending Fees (in Rs)", min_value=0)       
+                            
                             if st.button("Save"):
                                 cursor_update = db.cursor()
-                                sql_update = "UPDATE members SET ending_date = %s, Status = 'Active' WHERE id = %s"
-                                cursor_update.execute(sql_update, (new_ending_date, membership_id[0])) # type: ignore
+                                sql_update = "UPDATE members SET ending_date = %s,Membership_type = %s, Status = 'Active' WHERE id = %s"
+                                cursor_update.execute(sql_update, (new_ending_date,membership_type, membership_id[0])) # type: ignore
                                 db.commit()
                                 st.success(f"Membership for ID {membership_id[0]} updated successfully.")
+                                cursor = db.cursor()
+                                sql = "UPDATE members SET Fees = Fees + %s, pending = pending + %s WHERE id = %s"
+                                val = (fees_paid,pending_fees, membership_id[0])
+                                cursor.execute(sql, val) # type: ignore
+                                db.commit()
+                                cursor.close()
+
                             else:
                                 st.write("Click 'Save' to update the membership.")
                         elif recharged == "No":
-                            if st.button(f"Unactive Membership for ID {membership_id[0]}"):
+                            if st.button(f"Inactive Membership for ID {membership_id[0]}"):
                                 cursor_update = db.cursor()
-                                Unactive_sql = "UPDATE  members SET Status = 'Unactive'  WHERE id = %s"
+                                Unactive_sql = "UPDATE  members SET Status = 'Inactive'  WHERE id = %s"
                                 cursor_update.execute(Unactive_sql, (membership_id[0],)) # type: ignore
                                 db.commit()
-                                st.success(f"Membership for ID {membership_id[0]} is Unactived.")
+                                st.success(f"Membership for ID {membership_id[0]} is Inactived.")
                 else:
                     st.info("No Memberships over today.")
     
@@ -197,83 +337,88 @@ elif page =="Fees Status":
 
 elif page == "Update Info":
     # Create a cursor
-    cursor = db.cursor()
-    
-   
-    all_ids_query = "SELECT id, name FROM members"
-    cursor.execute(all_ids_query)
-    all_ids = cursor.fetchall()
+    # Create a cursor
 
-    all_id_values = [id[0] for id in all_ids]
+  cursor = db.cursor()
+# Query to get ID and name of all members
+  
+  all_ids_query = "SELECT id, name FROM members"
+  cursor.execute(all_ids_query)
+  all_ids = cursor.fetchall()
 
-   
-    selected_id = st.selectbox("Select profile ID you want to edit", all_id_values)
+# Create a list of tuples with ID and name
+  id_name_tuples = [(id, name) for id, name in all_ids]
 
- 
-    if selected_id:
-        class Update_info:
-            def __init__(self, selected_id):
-                self.selected_id = selected_id
-                self.update_member_info()
+# Extract the IDs for select box
+  all_id_values = [id for id, _ in id_name_tuples]
 
-            def update_member_info(self):
-                cursor = db.cursor()
-                try:
-                    
-                    check_sql = "SELECT * FROM members WHERE id = %s"
-                    cursor.execute(check_sql, (self.selected_id,))
-                    member = cursor.fetchone()
+# Create a select box with ID and name
+  selected_id_name = st.selectbox("Select profile ID you want to edit", id_name_tuples)
 
-                    if member:
-                        st.write(f"Updating information for Member ID {self.selected_id}:")
-                        st.write("Leave a field blank to keep the existing value.")
+  if selected_id_name:
+    selected_id = selected_id_name[0]  # Extract the selected ID from the tuple
 
-                        # Get updated member information from the user
-                        new_name = st.text_input(f"New Name ({member[1]}): ").strip() or member[1]
-                        new_phone = st.number_input(f"New Phone Number ({member[2]}): ") or member[2]
-                        new_age = st.number_input(f"New Age ({member[3]}): ") or member[3]
-                        new_height = st.number_input(f"New Height ({member[4]}): ") or member[4]
-                        new_weight = st.number_input(f"New Weight ({member[5]}): ") or member[5]
-                        new_disease = st.text_input(f"New Any Disease ({member[6]}): ").strip() or member[6]
-                        pending_update = st.number_input(f"Pending update ({member[10]}): ") or member[10]
-                        
-                        status_info = st.selectbox(f"status ({member[11]})",("same","Active")) or member[10]
-                        if status_info == "Active":
-                            new_ending_date = st.date_input(f"New ending date for ID {member[0]}")
-                            if st.button("change"):
-                                cursor_update = db.cursor()
-                                sql_update = "UPDATE members SET ending_date = %s, Status = 'Active' WHERE id = %s"
-                                cursor_update.execute(sql_update, (new_ending_date, member[0])) # type: ignore
-                                db.commit()
-                                st.success(f"Membership for ID {member[0]} updated successfully.")
+    class Update_info:
+        def __init__(self, selected_id):
+            self.selected_id = selected_id
+            self.update_member_info()
 
+        def update_member_info(self):
+            cursor = db.cursor()
+            try:
+                check_sql = "SELECT * FROM members WHERE id = %s"
+                cursor.execute(check_sql, (self.selected_id,))
+                member = cursor.fetchone()
 
-                    
-                        if st.button("Save"):
-                           cursor = db.cursor()
-                           sql = """UPDATE members 
-                           SET  Fees = Fees + pending - %s ,pending  =  %s  Where id = %s"""
-                           val = (pending_update,pending_update,self.selected_id)
-                           cursor.execute(sql,val) # type: ignore
-                           db.commit()
-                           update_sql = "UPDATE members SET Name = %s, Phone_Number = %s, Age = %s, Height = %s, Weight = %s, Any_disease = %s WHERE id = %s"
-                           val = (new_name, new_phone, new_age, new_height, new_weight, new_disease,self.selected_id)
-                           cursor.execute(update_sql, val) # type: ignore
-                           db.commit()
+                if member:
+                    st.write(f"Updating information for Member ID {self.selected_id}:")
+                    st.write("Leave a field blank to keep the existing value.")
 
-                           st.success(f"Member ID {self.selected_id} has been updated.")
+                    # Get updated member information from the user
+                    new_name = st.text_input(f"New Name ({member[1]}): ").strip() or member[1]
+                    new_phone = st.number_input(f"New Phone Number ({member[2]}): ") or member[2]
+                    new_age = st.number_input(f"New Age ({member[3]}): ") or member[3]
+                    new_height = st.number_input(f"New Height ({member[4]}): ") or member[4]
+                    new_weight = st.number_input(f"New Weight ({member[5]}): ") or member[5]
+                    new_disease = st.text_input(f"New Any Disease ({member[6]}): ").strip() or member[6]
+                    pending_update = st.number_input(f"Pending update ({member[10]}): ") or member[10]
 
-                    else:
-                        st.warning(f"Member ID {self.selected_id} does not exist.")
-                except mysql.connector.Error as err:
-                    st.error(f"Error: {err}")
-                finally:
-                    cursor.close()
+                    status_info = st.selectbox(f"status ({member[11]})", ("same", "Active")) or member[10]
+                    if status_info == "Active":
+                        new_ending_date = st.date_input(f"New ending date for ID {member[0]}")
+                        if st.button("change"):
+                            cursor_update = db.cursor()
+                            sql_update = "UPDATE members SET ending_date = %s, Status = 'Active' WHERE id = %s"
+                            cursor_update.execute(sql_update, (new_ending_date, member[0]))  # type: ignore
+                            db.commit()
+                            st.success(f"Membership for ID {member[0]} updated successfully.")
 
-        update = Update_info(selected_id) 
+                    if st.button("Save"):
+                        cursor = db.cursor()
+                        sql = """UPDATE members 
+                        SET  Fees = Fees + pending - %s ,pending  =  %s  Where id = %s"""
+                        val = (pending_update, pending_update, self.selected_id)
+                        cursor.execute(sql, val)  # type: ignore
+                        db.commit()
+                        update_sql = "UPDATE members SET Name = %s, Phone_Number = %s, Age = %s, Height = %s, Weight = %s, Any_disease = %s WHERE id = %s"
+                        val = (new_name, new_phone, new_age, new_height, new_weight, new_disease, self.selected_id)
+                        cursor.execute(update_sql, val)  # type: ignore
+                        db.commit()
+
+                        st.success(f"Member ID {self.selected_id} has been updated.")
+
+                else:
+                    st.warning(f"Member ID {self.selected_id} does not exist.")
+            except mysql.connector.Error as err:
+                st.error(f"Error: {err}")
+            finally:
+                cursor.close()
+
+    update = Update_info(selected_id)
+
 
 elif page == "View Data":
-    view_option = st.selectbox("Select which data you want to see", ("Active", "Unactive", "All Data"))
+    view_option = st.selectbox("Select which data you want to see", ("Active", "Inactive", "All Data"))
 
     if view_option == "Active":
         cursor = db.cursor()
@@ -295,9 +440,9 @@ elif page == "View Data":
             st.warning("No data found.")
 
 
-    elif view_option == "Unactive":
+    elif view_option == "Inactive":
         cursor = db.cursor()
-        sql = "SELECT * FROM members Where status ='Unactive'"
+        sql = "SELECT * FROM members Where status ='Inactive'"
         cursor.execute(sql)
 
         data = cursor.fetchall()

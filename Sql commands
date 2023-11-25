@@ -1,0 +1,18 @@
+create database ss;
+use ss;
+
+CREATE TABLE IF NOT EXISTS members (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255),
+    Phone_Number VARCHAR(15),
+    Age INT,
+    Height FLOAT,
+    Weight FLOAT,
+    Any_disease VARCHAR(255),
+    joining_date DATE,
+    ending_date DATE,
+    Fees INT,
+    pending INT,
+    Membership_type varchar(255),
+    Status VARCHAR(255) DEFAULT 'Active' );
+ALTER TABLE members AUTO_INCREMENT = 1000;
